@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -18,8 +17,10 @@ public class WeeklyFragment extends Fragment {
 
     private WeeklyViewModel weeklyViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         weeklyViewModel =
                 ViewModelProviders.of(this).get(WeeklyViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -30,6 +31,6 @@ public class WeeklyFragment extends Fragment {
                 textView.setText(s);
             }
         });
-        return root;
+        return inflater.inflate(R.layout.fragment_weeklyview, container, false);
     }
 }
