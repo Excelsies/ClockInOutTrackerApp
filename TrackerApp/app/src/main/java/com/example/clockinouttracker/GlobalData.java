@@ -158,8 +158,8 @@ public class GlobalData extends Activity{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
         readFile();
+        super.onCreate(savedInstanceState, persistentState);
     }
 
     public void clockIn(String time, String day, String dayName){
@@ -229,7 +229,59 @@ public class GlobalData extends Activity{
         writeFile();
     }
 
-    private boolean checkCurrentDate(String today){
+    public String getClockIn(String day){
+        String s = "You have yet to clock in";
+
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getClockIn() != null)
+            {
+                s = dates.get(dates.size() - 1).getClockIn();
+            }
+        }
+
+        return s;
+    }
+
+    public String getClockOut(String day){
+        String s = "You have yet to clock out";
+
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getClockOut() != null)
+            {
+                s = dates.get(dates.size() - 1).getClockOut();
+            }
+        }
+
+        return s;
+    }
+
+    public String getLunchIn(String day){
+        String s = "You have yet to arrive from lunch";
+
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getLunchIn() != null)
+            {
+                s = dates.get(dates.size() - 1).getLunchIn();
+            }
+        }
+
+        return s;
+    }
+
+    public String getLunchOut(String day){
+        String s = "You have yet to leave for lunch";
+
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getLunchOut() != null)
+            {
+                s = dates.get(dates.size() - 1).getLunchOut();
+            }
+        }
+
+        return s;
+    }
+
+    public boolean checkCurrentDate(String today){
         if(dates.size() > 0) {
             if (dates.get(dates.size() - 1).getDate() != today) {
                 return false;
@@ -314,12 +366,12 @@ public class GlobalData extends Activity{
 }
 
 class GlobalDates{
-    private String myDate;
-    private String DayName;
-    private String clockInTime;
-    private String lunchOutTime;
-    private String lunchInTime;
-    private String clockOutTime;
+    private String myDate = null;
+    private String DayName = null;
+    private String clockInTime = null;
+    private String lunchOutTime = null;
+    private String lunchInTime = null;
+    private String clockOutTime = null;
 
     public void setDate(String date){
         myDate = date;
