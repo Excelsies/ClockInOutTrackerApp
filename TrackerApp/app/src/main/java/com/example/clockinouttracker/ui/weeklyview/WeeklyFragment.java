@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.clockinouttracker.GlobalData;
 import com.example.clockinouttracker.R;
@@ -26,8 +24,6 @@ public class WeeklyFragment extends Fragment {
 
     SimpleDateFormat dayformatter = new SimpleDateFormat("MM-dd-yyyy");
 
-    GlobalData MyData;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -41,12 +37,10 @@ public class WeeklyFragment extends Fragment {
         LunchIn = root.findViewById(R.id.lunchInTxt);
         clockOut = root.findViewById(R.id.clockOutTxt);
 
-        MyData = new GlobalData();
-
-        clockIn.setText(MyData.getClockIn(day));
-        lunchOut.setText(MyData.getLunchOut(day));
-        LunchIn.setText(MyData.getLunchIn(day));
-        clockOut.setText(MyData.getClockOut(day));
+        clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
+        lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
+        LunchIn.setText(((GlobalData) getActivity().getApplication()).getLunchIn(day));
+        clockOut.setText(((GlobalData) getActivity().getApplication()).getClockOut(day));
 
         return root;
     }

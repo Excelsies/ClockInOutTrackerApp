@@ -1,27 +1,13 @@
 package com.example.clockinouttracker;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-public class GlobalData  extends Activity implements Parcelable {
+public class GlobalData  extends Application {
 
     public ArrayList<GlobalDates> dates = new ArrayList<GlobalDates>() {
         @Override
@@ -159,28 +145,6 @@ public class GlobalData  extends Activity implements Parcelable {
     };
     public String lastEvent = null;
 
-    protected GlobalData(Parcel in) {
-        dates = in.readArrayList(ClassLoader.getSystemClassLoader());
-        lastEvent = in.readString();
-    }
-
-    public static final Creator<GlobalData> CREATOR = new Creator<GlobalData>() {
-        @Override
-        public GlobalData createFromParcel(Parcel in) {
-            return new GlobalData(in);
-        }
-
-        @Override
-        public GlobalData[] newArray(int size) {
-            return new GlobalData[size];
-        }
-    };
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        readFile();
-        super.onCreate(savedInstanceState, persistentState);
-    }
 
     public void clockIn(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
@@ -252,12 +216,12 @@ public class GlobalData  extends Activity implements Parcelable {
     public String getClockIn(String day){
         String s = "You have yet to clock in";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getClockIn() != null)
-            {
-                s = dates.get(dates.size() - 1).getClockIn();
-            }
-        }
+//        if(checkCurrentDate(day)){
+//            if(dates.get(dates.size() - 1).getClockIn() != null)
+//            {
+//                s = dates.get(dates.size() - 1).getClockIn();
+//            }
+//        }
 
         return s;
     }
@@ -265,12 +229,12 @@ public class GlobalData  extends Activity implements Parcelable {
     public String getClockOut(String day){
         String s = "You have yet to clock out";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getClockOut() != null)
-            {
-                s = dates.get(dates.size() - 1).getClockOut();
-            }
-        }
+//        if(checkCurrentDate(day)){
+//            if(dates.get(dates.size() - 1).getClockOut() != null)
+//            {
+//                s = dates.get(dates.size() - 1).getClockOut();
+//            }
+//        }
 
         return s;
     }
@@ -278,12 +242,12 @@ public class GlobalData  extends Activity implements Parcelable {
     public String getLunchIn(String day){
         String s = "You have yet to arrive from lunch";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getLunchIn() != null)
-            {
-                s = dates.get(dates.size() - 1).getLunchIn();
-            }
-        }
+//        if(checkCurrentDate(day)){
+//            if(dates.get(dates.size() - 1).getLunchIn() != null)
+//            {
+//                s = dates.get(dates.size() - 1).getLunchIn();
+//            }
+//        }
 
         return s;
     }
@@ -291,12 +255,12 @@ public class GlobalData  extends Activity implements Parcelable {
     public String getLunchOut(String day){
         String s = "You have yet to leave for lunch";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getLunchOut() != null)
-            {
-                s = dates.get(dates.size() - 1).getLunchOut();
-            }
-        }
+//        if(checkCurrentDate(day)){
+//            if(dates.get(dates.size() - 1).getLunchOut() != null)
+//            {
+//                s = dates.get(dates.size() - 1).getLunchOut();
+//            }
+//        }
 
         return s;
     }
@@ -326,22 +290,6 @@ public class GlobalData  extends Activity implements Parcelable {
         } catch(Exception e){
             e.printStackTrace();
         }
-//        try{
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ObjectOutputStream oos = new ObjectOutputStream(bos);
-//            oos.writeObject(dates);
-//            byte[] bytes = bos.toByteArray();
-//
-//            FileOutputStream fos = openFileOutput ("MyTimes.txt", MODE_PRIVATE);
-//            ObjectOutputStream os = new ObjectOutputStream(fos);
-//            os.writeObject(bytes);
-//            os.close();
-//            fos.close();
-//        } catch(FileNotFoundException e){
-//            e.printStackTrace();
-//        } catch(IOException e){
-//            e.printStackTrace();
-//        }
     }
 
     public void readFile() {
@@ -358,40 +306,8 @@ public class GlobalData  extends Activity implements Parcelable {
         } catch(Exception e){
             e.printStackTrace();
         }
-//        try {
-//            FileInputStream fileInputStream = openFileInput("MyTimes.txt");
-//            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-//
-//            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//            int nRead;
-//            byte[] data = new byte[16384];
-//
-//            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-//                buffer.write(data, 0, nRead);
-//            }
-//
-//            byte[] buf = buffer.toByteArray();
-//
-//            ByteArrayInputStream in = new ByteArrayInputStream(buf);
-//            ObjectInputStream is = new ObjectInputStream(in);
-//            dates = (List<GlobalDates>) is.readObject();
-//        } catch (FileNotFoundException | ClassNotFoundException e){
-//            e.printStackTrace();
-//        } catch (IOException e){
-//            e.printStackTrace();
-//        }
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(lastEvent);
-    }
 }
 
 class GlobalDates{

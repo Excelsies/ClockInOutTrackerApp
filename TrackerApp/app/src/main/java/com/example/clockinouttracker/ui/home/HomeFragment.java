@@ -1,7 +1,5 @@
 package com.example.clockinouttracker.ui.home;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +25,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     SimpleDateFormat dayformatter = new SimpleDateFormat("MM-dd-yyyy");
     SimpleDateFormat dayName = new SimpleDateFormat("E");
 
-    GlobalData MyData;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -48,10 +44,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         lunchOutBtn.setOnClickListener(this);
         clockOutBtn.setOnClickListener(this);
 
-        MyData = new GlobalData();
 
-        if(MyData.lastEvent != null){
-            text.setText(MyData.lastEvent);
+        if(((GlobalData) getActivity().getApplication()).lastEvent != null){
+            text.setText(((GlobalData) getActivity().getApplication()).lastEvent);
         }
 
         return view;
@@ -66,26 +61,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.btnClockIn:
                 text.setText("Clocked in for the day at: " + time + " on " + DayName + " " + day);
-                MyData.lastEvent = text.getText().toString();
-                MyData.clockIn(time, day, DayName);
+                ((GlobalData) getActivity().getApplication()).lastEvent = text.getText().toString();
+                ((GlobalData) getActivity().getApplication()).clockIn(time, day, DayName);
                 Toast.makeText(getContext(), "Clocked In", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnLunchIn:
                 text.setText("Clocked in from lunch at: " + time + " on " + day);
-                MyData.lastEvent = text.getText().toString();
-                MyData.lunchIn(time, day, DayName);
+                ((GlobalData) getActivity().getApplication()).lastEvent = text.getText().toString();
+                ((GlobalData) getActivity().getApplication()).lunchIn(time, day, DayName);
                 Toast.makeText(getContext(), "Came back from lunch", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnLunchOut:
                 text.setText("Clocked out for lunch at: " + time + " on " + day);
-                MyData.lastEvent = text.getText().toString();
-                MyData.lunchOut(time, day, DayName);
+                ((GlobalData) getActivity().getApplication()).lastEvent = text.getText().toString();
+                ((GlobalData) getActivity().getApplication()).lunchOut(time, day, DayName);
                 Toast.makeText(getContext(), "Leaving for lunch", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnClockOut:
                 text.setText("Clocked out for the day at: " + time + " on " + day);
-                MyData.lastEvent = text.getText().toString();
-                MyData.clockOut(time, day, DayName);
+                ((GlobalData) getActivity().getApplication()).lastEvent = text.getText().toString();
+                ((GlobalData) getActivity().getApplication()).clockOut(time, day, DayName);
                 Toast.makeText(getContext(), "Clocked Out", Toast.LENGTH_SHORT).show();
                 break;
         }
