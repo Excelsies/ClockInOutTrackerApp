@@ -3,6 +3,8 @@ package com.example.clockinouttracker;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-public class GlobalData extends Activity{
+public class GlobalData  extends Activity implements Parcelable {
 
     public ArrayList<GlobalDates> dates = new ArrayList<GlobalDates>() {
         @Override
@@ -155,6 +158,23 @@ public class GlobalData extends Activity{
         }
     };
     public String lastEvent = null;
+
+    protected GlobalData(Parcel in) {
+        dates = in.readArrayList(ClassLoader.getSystemClassLoader());
+        lastEvent = in.readString();
+    }
+
+    public static final Creator<GlobalData> CREATOR = new Creator<GlobalData>() {
+        @Override
+        public GlobalData createFromParcel(Parcel in) {
+            return new GlobalData(in);
+        }
+
+        @Override
+        public GlobalData[] newArray(int size) {
+            return new GlobalData[size];
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -363,6 +383,15 @@ public class GlobalData extends Activity{
 //        }
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(lastEvent);
+    }
 }
 
 class GlobalDates{

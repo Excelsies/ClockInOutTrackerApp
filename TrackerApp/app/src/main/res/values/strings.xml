@@ -9,7 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_weeklyview">My Times</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_shareview">Share Times</string>
 
     <string name="last_action">You have yet to do anything</string>
     <string name="clock_in">Clock In</string>

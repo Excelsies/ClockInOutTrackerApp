@@ -5,6 +5,7 @@ import android.view.MenuItem;
 import android.view.Menu;
 
 import com.example.clockinouttracker.ui.home.HomeFragment;
+import com.example.clockinouttracker.ui.shareview.ShareFragment;
 import com.example.clockinouttracker.ui.weeklyview.WeeklyFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_weeklyview:
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new WeeklyFragment()).commit();
+                break;
+            case R.id.nav_shareview:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new ShareFragment()).commit();
                 break;
         }
 
