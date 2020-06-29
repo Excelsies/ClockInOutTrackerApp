@@ -8,7 +8,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_weeklyview">Weekly View</string>
+    <string name="menu_weeklyview">My Times</string>
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="last_action">You have yet to do anything</string>
