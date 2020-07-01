@@ -105,31 +105,32 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 time =  selectedHour + ":" + selectedMinute;
+
+                switch (tempView.getId()) {
+                    case R.id.clockInTxt:
+                        ((GlobalData) getActivity().getApplication()).clockIn(time, day, DayName);
+                        clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
+                        Toast.makeText(getContext(), "Clock In time changed", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.lunchOutTxt:
+                        ((GlobalData) getActivity().getApplication()).lunchOut(time, day, DayName);
+                        lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
+                        Toast.makeText(getContext(), "Lunch Out time changed", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.lunchInTxt:
+                        ((GlobalData) getActivity().getApplication()).lunchIn(time, day, DayName);
+                        LunchIn.setText(((GlobalData) getActivity().getApplication()).getLunchIn(day));
+                        Toast.makeText(getContext(), "Lunch In time changed", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.clockOutTxt:
+                        ((GlobalData) getActivity().getApplication()).clockOut(time, day, DayName);
+                        clockOut.setText(((GlobalData) getActivity().getApplication()).getClockOut(day));
+                        Toast.makeText(getContext(), "Clock Out time changed", Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         }, hour, minute, true);
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
-        switch (tempView.getId()) {
-            case R.id.clockInTxt:
-                ((GlobalData) getActivity().getApplication()).clockIn(time, day, DayName);
-                clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
-                Toast.makeText(getContext(), "You clicked the Clock In time!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.lunchOutTxt:
-                ((GlobalData) getActivity().getApplication()).lunchOut(time, day, DayName);
-                lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
-                Toast.makeText(getContext(), "You clicked the Lunch Out time!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.lunchInTxt:
-                ((GlobalData) getActivity().getApplication()).lunchIn(time, day, DayName);
-                LunchIn.setText(((GlobalData) getActivity().getApplication()).getLunchIn(day));
-                Toast.makeText(getContext(), "You clicked the Lunch In time!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.clockOutTxt:
-                ((GlobalData) getActivity().getApplication()).clockOut(time, day, DayName);
-                clockOut.setText(((GlobalData) getActivity().getApplication()).getClockOut(day));
-                Toast.makeText(getContext(), "You clicked the Clock Out time!", Toast.LENGTH_SHORT).show();
-                break;
-        }
     }
 }
