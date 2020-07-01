@@ -1,10 +1,12 @@
 package com.example.clockinouttracker.ui.shareview;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.example.clockinouttracker.GlobalData;
 import com.example.clockinouttracker.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ShareFragment extends Fragment implements View.OnClickListener{
@@ -29,6 +32,11 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
     RadioButton rBtnLastWeek;
     RadioButton rBtnMonthToDate;
     RadioButton rBtnCustom;
+
+    final Calendar newCalendar = Calendar.getInstance();
+    DatePickerDialog StartTime;
+    DatePickerDialog EndTime;
+    SimpleDateFormat dayformatter = new SimpleDateFormat("MM-dd-yyyy");
 
     @Nullable
     @Override
@@ -44,6 +52,24 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
         rBtnLastWeek = root.findViewById(R.id.rBtnLastWeek);
         rBtnMonthToDate = root.findViewById(R.id.rBtnMonthToDate);
         rBtnCustom = root.findViewById(R.id.rBtnCustom);
+
+        StartTime = new DatePickerDialog(this.getContext(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                btnFrom.setText(dayformatter.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        EndTime = new DatePickerDialog(this.getContext(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                btnTo.setText(dayformatter.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
 
         btnFrom.setOnClickListener(this);
@@ -72,9 +98,11 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(getContext(), "Radio set to custom", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fromBtn:
+                StartTime.show();
                 Toast.makeText(getContext(), "From Selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.toBtn:
+                EndTime.show();
                 Toast.makeText(getContext(), "To Selected", Toast.LENGTH_SHORT).show();
                 break;
         }
