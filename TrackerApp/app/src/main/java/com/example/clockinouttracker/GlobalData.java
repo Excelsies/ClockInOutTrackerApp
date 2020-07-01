@@ -3,7 +3,6 @@ package com.example.clockinouttracker;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,13 +10,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.ListIterator;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 
 public class GlobalData  extends Application {
@@ -101,40 +96,36 @@ public class GlobalData  extends Application {
 
     public String getClockIn(String day){
         String s = "You have yet to clock in";
-        System.out.println("0: " + day);
-        if(checkCurrentDate(day)){
-            System.out.println("1");
-            if(dates.get(dates.size() - 1).getClockIn() != null)
-            {
-                System.out.println("2");
-                s = dates.get(dates.size() - 1).getClockIn();
-            }
-        }
 
+        int index = getIndex(day);
+
+        if (index >= 0){
+            s = dates.get(index).getClockIn() + " on " + dates.get(index).getDayName() + ", " + dates.get(index).getDate();
+            return s;
+        }
         return s;
     }
 
     public String getClockOut(String day){
         String s = "You have yet to clock out";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getClockOut() != null)
-            {
-                s = dates.get(dates.size() - 1).getClockOut();
-            }
-        }
+        int index = getIndex(day);
 
+        if (index >= 0){
+            s = dates.get(index).getClockOut() + " on " + dates.get(index).getDayName() + ", " + dates.get(index).getDate();
+            return s;
+        }
         return s;
     }
 
     public String getLunchIn(String day){
         String s = "You have yet to arrive from lunch";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getLunchIn() != null)
-            {
-                s = dates.get(dates.size() - 1).getLunchIn();
-            }
+        int index = getIndex(day);
+
+        if (index >= 0){
+            s = dates.get(index).getLunchIn() + " on " + dates.get(index).getDayName() + ", " + dates.get(index).getDate();
+            return s;
         }
 
         return s;
@@ -143,20 +134,30 @@ public class GlobalData  extends Application {
     public String getLunchOut(String day){
         String s = "You have yet to leave for lunch";
 
-        if(checkCurrentDate(day)){
-            if(dates.get(dates.size() - 1).getLunchOut() != null)
-            {
-                s = dates.get(dates.size() - 1).getLunchOut();
-            }
-        }
+        int index = getIndex(day);
 
+        if (index >= 0){
+            s = dates.get(index).getLunchOut() + " on " + dates.get(index).getDayName() + ", " + dates.get(index).getDate();
+            return s;
+        }
         return s;
+    }
+
+    public int getIndex(String date){
+        int index = Collections.binarySearch(dates, new GlobalDates(date), new Comparator<GlobalDates>() {
+
+            @Override
+            public int compare(GlobalDates o1, GlobalDates o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+        return index;
     }
 
     public boolean checkCurrentDate(String today){
         if(dates != null) {
             if (dates.size() > 0) {
-                if (dates.get(dates.size() - 1).getDate() != today) {
+                if (!dates.get(dates.size() - 1).getDate().equals(today)) {
                     return false;
                 }
                 return true;
@@ -222,6 +223,12 @@ class GlobalDates{
     private String lunchOutTime = null;
     private String lunchInTime = null;
     private String clockOutTime = null;
+
+    public GlobalDates(){}
+
+    public GlobalDates(String MyDate){
+        this.myDate = MyDate;
+    }
 
     public void setDate(String date){
         myDate = date;
