@@ -29,10 +29,12 @@ public class GlobalData  extends Application {
 
     public void clockIn(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
-        if(checkCurrentDate(day)){
-            todaysTimes = dates.get(dates.size() - 1);
+        int index = getIndex(day);
+
+        if (index >= 0){
+            todaysTimes = dates.get(index);
             todaysTimes.setClockIn(time);
-            dates.set(dates.size() - 1, todaysTimes);
+            dates.set(index, todaysTimes);
         }
         else{
             todaysTimes.setDate(day);
@@ -45,10 +47,12 @@ public class GlobalData  extends Application {
 
     public void lunchOut(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
-        if(checkCurrentDate(day)){
-            todaysTimes = dates.get(dates.size() - 1);
+        int index = getIndex(day);
+
+        if (index >= 0){
+            todaysTimes = dates.get(index);
             todaysTimes.setLunchOut(time);
-            dates.set(dates.size() - 1, todaysTimes);
+            dates.set(index, todaysTimes);
         }
         else{
             todaysTimes.setDate(day);
@@ -62,10 +66,12 @@ public class GlobalData  extends Application {
 
     public void lunchIn(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
-        if(checkCurrentDate(day)){
-            todaysTimes = dates.get(dates.size() - 1);
+        int index = getIndex(day);
+
+        if (index >= 0){
+            todaysTimes = dates.get(index);
             todaysTimes.setLunchIn(time);
-            dates.set(dates.size() - 1, todaysTimes);
+            dates.set(index, todaysTimes);
         }
         else{
             todaysTimes.setDate(day);
@@ -79,10 +85,12 @@ public class GlobalData  extends Application {
 
     public void clockOut(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
-        if(checkCurrentDate(day)){
-            todaysTimes = dates.get(dates.size() - 1);
+        int index = getIndex(day);
+
+        if (index >= 0){
+            todaysTimes = dates.get(index);
             todaysTimes.setClockOut(time);
-            dates.set(dates.size() - 1, todaysTimes);
+            dates.set(index, todaysTimes);
         }
         else{
             todaysTimes.setDate(day);
@@ -152,20 +160,6 @@ public class GlobalData  extends Application {
             }
         });
         return index;
-    }
-
-    public boolean checkCurrentDate(String today){
-        if(dates != null) {
-            if (dates.size() > 0) {
-                if (!dates.get(dates.size() - 1).getDate().equals(today)) {
-                    return false;
-                }
-                return true;
-            } else
-                return false;
-        }
-        else
-            return false;
     }
 
     public void clearData(){

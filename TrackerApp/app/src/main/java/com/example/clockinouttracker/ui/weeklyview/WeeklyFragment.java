@@ -1,11 +1,13 @@
 package com.example.clockinouttracker.ui.weeklyview;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import com.example.clockinouttracker.GlobalData;
 import com.example.clockinouttracker.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class WeeklyFragment extends Fragment implements View.OnClickListener {
@@ -24,11 +27,17 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
     TextView lunchOut;
     TextView LunchIn;
     TextView clockOut;
+
     CalendarView calender;
 
+    String DayName;
     String day;
+    String time;
+
+    View tempView;
 
     SimpleDateFormat dayformatter = new SimpleDateFormat("MM-dd-yyyy");
+    SimpleDateFormat dayName = new SimpleDateFormat("E");
 
     @Nullable
     @Override
@@ -71,6 +80,8 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
                         else
                             day = "0" + (month + 1) + "-" + dayOfMonth + "-" + year;
 
+                        DayName = dayName.format(calender.getDate());
+
                         clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
                         lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
                         LunchIn.setText(((GlobalData) getActivity().getApplication()).getLunchIn(day));
@@ -85,17 +96,38 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        tempView = v;
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(this.getContext(), new TimePickerDialog.OnTimeSetListener(){
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                time =  selectedHour + ":" + selectedMinute;
+            }
+        }, hour, minute, true);
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+        switch (tempView.getId()) {
             case R.id.clockInTxt:
+                ((GlobalData) getActivity().getApplication()).clockIn(time, day, DayName);
+                clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
                 Toast.makeText(getContext(), "You clicked the Clock In time!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.lunchOutTxt:
+                ((GlobalData) getActivity().getApplication()).lunchOut(time, day, DayName);
+                lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
                 Toast.makeText(getContext(), "You clicked the Lunch Out time!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.lunchInTxt:
+                ((GlobalData) getActivity().getApplication()).lunchIn(time, day, DayName);
+                LunchIn.setText(((GlobalData) getActivity().getApplication()).getLunchIn(day));
                 Toast.makeText(getContext(), "You clicked the Lunch In time!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.clockOutTxt:
+                ((GlobalData) getActivity().getApplication()).clockOut(time, day, DayName);
+                clockOut.setText(((GlobalData) getActivity().getApplication()).getClockOut(day));
                 Toast.makeText(getContext(), "You clicked the Clock Out time!", Toast.LENGTH_SHORT).show();
                 break;
         }
