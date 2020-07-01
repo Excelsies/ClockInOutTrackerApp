@@ -28,6 +28,7 @@ public class WeeklyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((GlobalData) getActivity().getApplication()).readFile();
         Date date = new Date();
         String day = dayformatter.format(date);
         View root = inflater.inflate(R.layout.fragment_weeklyview, container, false);

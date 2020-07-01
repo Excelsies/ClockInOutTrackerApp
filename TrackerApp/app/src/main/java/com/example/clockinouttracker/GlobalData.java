@@ -3,6 +3,7 @@ package com.example.clockinouttracker;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,130 +22,15 @@ import androidx.annotation.Nullable;
 
 public class GlobalData  extends Application {
 
-    public ArrayList<GlobalDates> dates = new ArrayList<GlobalDates>() {
-        @Override
-        public int size() {
-            return 0;
-        }
+    public List<GlobalDates> dates;
+    public String lastEvent ;
 
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public boolean contains(@Nullable Object o) {
-            return false;
-        }
-
-        @NonNull
-        @Override
-        public Iterator<GlobalDates> iterator() {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        @NonNull
-        @Override
-        public <T> T[] toArray(@NonNull T[] ts) {
-            return null;
-        }
-
-        @Override
-        public boolean add(GlobalDates globalDates) {
-            return false;
-        }
-
-        @Override
-        public boolean remove(@Nullable Object o) {
-            return false;
-        }
-
-        @Override
-        public boolean containsAll(@NonNull Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean addAll(@NonNull Collection<? extends GlobalDates> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean addAll(int i, @NonNull Collection<? extends GlobalDates> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean removeAll(@NonNull Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean retainAll(@NonNull Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public void clear() {
-
-        }
-
-        @Override
-        public GlobalDates get(int i) {
-            return null;
-        }
-
-        @Override
-        public GlobalDates set(int i, GlobalDates globalDates) {
-            return null;
-        }
-
-        @Override
-        public void add(int i, GlobalDates globalDates) {
-
-        }
-
-        @Override
-        public GlobalDates remove(int i) {
-            return null;
-        }
-
-        @Override
-        public int indexOf(@Nullable Object o) {
-            return 0;
-        }
-
-        @Override
-        public int lastIndexOf(@Nullable Object o) {
-            return 0;
-        }
-
-        @NonNull
-        @Override
-        public ListIterator<GlobalDates> listIterator() {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public ListIterator<GlobalDates> listIterator(int i) {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public List<GlobalDates> subList(int i, int i1) {
-            return null;
-        }
-    };
-    public String lastEvent = null;
-
+    private void instantiateLastEvent(){
+        lastEvent = null;
+    }
+    private void instantiateDates(){
+        dates = new ArrayList<>();
+    }
 
     public void clockIn(String time, String day, String dayName){
         GlobalDates todaysTimes = new GlobalDates();
@@ -215,13 +101,15 @@ public class GlobalData  extends Application {
 
     public String getClockIn(String day){
         String s = "You have yet to clock in";
-
-//        if(checkCurrentDate(day)){
-//            if(dates.get(dates.size() - 1).getClockIn() != null)
-//            {
-//                s = dates.get(dates.size() - 1).getClockIn();
-//            }
-//        }
+        System.out.println("0: " + day);
+        if(checkCurrentDate(day)){
+            System.out.println("1");
+            if(dates.get(dates.size() - 1).getClockIn() != null)
+            {
+                System.out.println("2");
+                s = dates.get(dates.size() - 1).getClockIn();
+            }
+        }
 
         return s;
     }
@@ -229,12 +117,12 @@ public class GlobalData  extends Application {
     public String getClockOut(String day){
         String s = "You have yet to clock out";
 
-//        if(checkCurrentDate(day)){
-//            if(dates.get(dates.size() - 1).getClockOut() != null)
-//            {
-//                s = dates.get(dates.size() - 1).getClockOut();
-//            }
-//        }
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getClockOut() != null)
+            {
+                s = dates.get(dates.size() - 1).getClockOut();
+            }
+        }
 
         return s;
     }
@@ -242,12 +130,12 @@ public class GlobalData  extends Application {
     public String getLunchIn(String day){
         String s = "You have yet to arrive from lunch";
 
-//        if(checkCurrentDate(day)){
-//            if(dates.get(dates.size() - 1).getLunchIn() != null)
-//            {
-//                s = dates.get(dates.size() - 1).getLunchIn();
-//            }
-//        }
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getLunchIn() != null)
+            {
+                s = dates.get(dates.size() - 1).getLunchIn();
+            }
+        }
 
         return s;
     }
@@ -255,38 +143,47 @@ public class GlobalData  extends Application {
     public String getLunchOut(String day){
         String s = "You have yet to leave for lunch";
 
-//        if(checkCurrentDate(day)){
-//            if(dates.get(dates.size() - 1).getLunchOut() != null)
-//            {
-//                s = dates.get(dates.size() - 1).getLunchOut();
-//            }
-//        }
+        if(checkCurrentDate(day)){
+            if(dates.get(dates.size() - 1).getLunchOut() != null)
+            {
+                s = dates.get(dates.size() - 1).getLunchOut();
+            }
+        }
 
         return s;
     }
 
     public boolean checkCurrentDate(String today){
-        if(dates.size() > 0) {
-            if (dates.get(dates.size() - 1).getDate() != today) {
+        if(dates != null) {
+            if (dates.size() > 0) {
+                if (dates.get(dates.size() - 1).getDate() != today) {
+                    return false;
+                }
+                return true;
+            } else
                 return false;
-            }
-            return true;
         }
         else
             return false;
+    }
+
+    public void clearData(){
+        dates.clear();
+        lastEvent = null;
+        writeFile();
     }
 
     public void writeFile() {
         try {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPrefs.edit();
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
 
             String json = gson.toJson(dates); //Convert the array to json
 
-            editor.putString("TimesList", json); //Put the variable in memory
             editor.putString("LastEvent", lastEvent);
-            editor.commit();
+            editor.putString("TimesList", json); //Put the variable in memory
+            editor.apply();
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -295,17 +192,25 @@ public class GlobalData  extends Application {
     public void readFile() {
         try {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-            Gson gson = new Gson();
-            String json = sharedPrefs.getString("TimesList", null); //Retrieve previously saved data
-            lastEvent = sharedPrefs.getString("LastEvent", null);
-            if (json != null) {
-                Type type = new TypeToken<ArrayList<GlobalDates>>() {
-                }.getType();
-                dates = gson.fromJson(json, type); //Restore previous data
+            if(sharedPrefs.contains("LastEvent"))
+                lastEvent = sharedPrefs.getString("LastEvent", null);
+            else
+                instantiateLastEvent();
+
+            if(sharedPrefs.contains("TimesList")) {
+                String json = sharedPrefs.getString("TimesList", ""); //Retrieve previously saved data
+                dates = (getList(json, GlobalDates.class)); //Restore previous data
             }
+            else
+                instantiateDates();
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public <T> List<T> getList(String jsonArray, Class<T> clazz) {
+        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
+        return new Gson().fromJson(jsonArray, typeOfT);
     }
 
 }
