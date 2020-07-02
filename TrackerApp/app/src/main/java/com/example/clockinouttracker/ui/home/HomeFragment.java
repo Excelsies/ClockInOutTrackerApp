@@ -38,13 +38,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Button lunchInBtn = view.findViewById(R.id.btnLunchIn);
         Button lunchOutBtn = view.findViewById(R.id.btnLunchOut);
         Button clockOutBtn = view.findViewById(R.id.btnClockOut);
-        Button clearDataBtn = view.findViewById(R.id.clearDataBtn);
 
         clockInBtn.setOnClickListener(this);
         lunchInBtn.setOnClickListener(this);
         lunchOutBtn.setOnClickListener(this);
         clockOutBtn.setOnClickListener(this);
-        clearDataBtn.setOnClickListener(this);
 
 
         if(((GlobalData) getActivity().getApplication()).lastEvent != null){
@@ -84,9 +82,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 ((GlobalData) getActivity().getApplication()).lastEvent = text.getText().toString();
                 ((GlobalData) getActivity().getApplication()).clockOut(time, day, DayName);
                 Toast.makeText(getContext(), "Clocked Out", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.clearDataBtn:
-                ((GlobalData) getActivity().getApplication()).clearData();
                 break;
         }
 

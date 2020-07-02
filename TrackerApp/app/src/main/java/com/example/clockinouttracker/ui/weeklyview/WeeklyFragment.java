@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.clockinouttracker.GlobalData;
 import com.example.clockinouttracker.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,12 +76,22 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
                             int dayOfMonth)
                     {
 
-                        if(month >= 9)
-                            day = (month + 1) + "-" + dayOfMonth + "-" + year;
-                        else
-                            day = "0" + (month + 1) + "-" + dayOfMonth + "-" + year;
+                        String M = String.valueOf(month + 1);
+                        String D = String.valueOf(dayOfMonth);
 
-                        DayName = dayName.format(calender.getDate());
+                        if(month < 9)
+                            M = "0" + (month+1);
+
+                        if(dayOfMonth <= 9)
+                            D = "0" + dayOfMonth;
+
+                        day = M + "-" + D + "-" + year;
+
+                        try {
+                            DayName = dayName.format(dayformatter.parse(day));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
                         clockIn.setText(((GlobalData) getActivity().getApplication()).getClockIn(day));
                         lunchOut.setText(((GlobalData) getActivity().getApplication()).getLunchOut(day));
@@ -104,7 +115,16 @@ public class WeeklyFragment extends Fragment implements View.OnClickListener {
         mTimePicker = new TimePickerDialog(this.getContext(), new TimePickerDialog.OnTimeSetListener(){
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                time =  selectedHour + ":" + selectedMinute;
+                String M = String.valueOf(selectedMinute);
+                String H = String.valueOf(selectedHour);
+
+                if(selectedHour <= 9)
+                    H = "0" + selectedHour;
+
+                if(selectedMinute <= 9)
+                     M =  "0" + selectedMinute;
+
+                time = H + ":" + M;
 
                 switch (tempView.getId()) {
                     case R.id.clockInTxt:

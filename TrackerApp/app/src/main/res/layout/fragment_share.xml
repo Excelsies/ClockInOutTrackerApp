@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_light">
+    android:background="@android:color/darker_gray">
 
 
     <Button
@@ -27,7 +27,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSaveToPhone"
         android:layout_width="150dp"
         android:layout_height="52dp"
         android:layout_marginBottom="10dp"
@@ -41,7 +41,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnSMS"
         android:layout_width="150dp"
         android:layout_height="52dp"
         android:layout_marginBottom="80dp"
@@ -155,7 +155,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnEmail"
         android:layout_width="150dp"
         android:layout_height="52dp"
         android:layout_marginBottom="80dp"
