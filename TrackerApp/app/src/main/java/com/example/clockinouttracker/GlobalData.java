@@ -39,7 +39,7 @@ import jxl.write.biff.RowsExceededException;
 public class GlobalData  extends Application {
 
     public List<GlobalDates> dates;
-    public String lastEvent ;
+    public String lastEvent;
 
     private void instantiateLastEvent(){
         lastEvent = null;
@@ -221,6 +221,10 @@ public class GlobalData  extends Application {
     public void CreateExcel(String fromDate, String toDate) {
 
         SimpleDateFormat myFormat = new SimpleDateFormat("MM-dd-yyyy");
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        double tHours = 0;
+
         Calendar c = Calendar.getInstance();
         try {
             c.setTime(myFormat.parse(fromDate));
@@ -241,22 +245,27 @@ public class GlobalData  extends Application {
                 writeCell(4, 0, "Lunch In", true, sheet);
                 writeCell(5, 0, "Clock Out", true, sheet);
                 writeCell(6, 0, "Total Time", true, sheet);
+                writeCell(8, 0, "Total Accumulated Hours", true, sheet);
 
                 for(int i = 0; i < dayCount + 1; i++){
                     String s = myFormat.format(c.getTime());
                     writeCell(0, i+1, s, true, sheet);
                     int index = getIndex(s);
                     if (index >= 0){
+                        tHours += totalHours(dates.get(index));
                         writeCell(1, i+1, dates.get(index).getDayName(), false, sheet);
                         writeCell(2, i+1, dates.get(index).getClockIn(), false, sheet);
                         writeCell(3, i+1, dates.get(index).getLunchOut(), false, sheet);
                         writeCell(4, i+1, dates.get(index).getLunchIn(), false, sheet);
                         writeCell(5, i+1, dates.get(index).getClockOut(), false, sheet);
-                        writeCell(6, i+1, totalHours(dates.get(index)), false, sheet);
+                        writeCell(6, i+1, df.format(totalHours(dates.get(index))), false, sheet);
                     }
-
                     c.add(Calendar.DATE, 1);
                 }
+
+                writeCell(8, 1, df.format(tHours), true, sheet);
+
+
 
             } catch (RowsExceededException e) {
                 e.printStackTrace();
@@ -295,10 +304,10 @@ public class GlobalData  extends Application {
         return amount;
     }
 
-    public String totalHours(GlobalDates day){
+    public double totalHours(GlobalDates day){
         SimpleDateFormat timeformatter = new SimpleDateFormat("HH:mm");
         DecimalFormat df = new DecimalFormat("0.00");
-        String amount = "";
+        double amount = 0;
 
         Date cIn;
         Date LOut;
@@ -327,8 +336,7 @@ public class GlobalData  extends Application {
         int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
         double min = (double) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
         min = min*0.01;
-        System.out.println("Min = " + min);
-        amount = df.format((hours < 0 ? -hours : hours) + min);
+        amount = (hours < 0 ? -hours : hours) + min;
 
         return amount;
 
