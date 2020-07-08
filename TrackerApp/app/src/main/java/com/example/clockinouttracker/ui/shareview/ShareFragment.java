@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -31,8 +32,10 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
     RadioButton rBtnLastWeek;
     RadioButton rBtnMonthToDate;
     RadioButton rBtnCustom;
+    RadioGroup rGroup;
 
     final Calendar newCalendar = Calendar.getInstance();
+    Calendar todayDate;
     DatePickerDialog StartTime;
     DatePickerDialog EndTime;
     SimpleDateFormat dayformatter = new SimpleDateFormat("MM-dd-yyyy");
@@ -45,6 +48,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
         ((GlobalData) getActivity().getApplication()).readFile();
         View root = inflater.inflate(R.layout.fragment_share, container, false);
 
+        todayDate = Calendar.getInstance();
+
         btnFrom = root.findViewById(R.id.fromBtn);
         btnTo = root.findViewById(R.id.toBtn);
         btnSaveToPhone = root.findViewById(R.id.btnSaveToPhone);
@@ -53,6 +58,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
         rBtnLastWeek = root.findViewById(R.id.rBtnLastWeek);
         rBtnMonthToDate = root.findViewById(R.id.rBtnMonthToDate);
         rBtnCustom = root.findViewById(R.id.rBtnCustom);
+        rGroup = root.findViewById(R.id.radioGroup);
 
         StartTime = new DatePickerDialog(this.getContext(), new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -88,15 +94,19 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rBtntwoWeeks:
+                todayDate = Calendar.getInstance();
                 timeRangeSelected = true;
                 break;
             case R.id.rBtnLastWeek:
+                todayDate = Calendar.getInstance();
                 timeRangeSelected = true;
                 break;
             case R.id.rBtnMonthToDate:
+                todayDate = Calendar.getInstance();
                 timeRangeSelected = true;
                 break;
             case R.id.rBtnCustom:
+                todayDate = Calendar.getInstance();
                 timeRangeSelected = true;
                 break;
             case R.id.fromBtn:
@@ -109,7 +119,31 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.btnSaveToPhone:
                 if(timeRangeSelected) {
-                    ((GlobalData) getActivity().getApplication()).CreateExcel(btnFrom.getText().toString(), btnTo.getText().toString());
+                    String startDate;
+                    String EndDate;
+                    EndDate = dayformatter.format(todayDate.getTime());
+                    switch(rGroup.getCheckedRadioButtonId()){
+                        case R.id.rBtntwoWeeks:
+                            todayDate.add(Calendar.DAY_OF_YEAR, -14);
+                            startDate = dayformatter.format(todayDate.getTime());
+                            break;
+                        case R.id.rBtnLastWeek:
+                            todayDate.add(Calendar.DAY_OF_YEAR, -7);
+                            startDate = dayformatter.format(todayDate.getTime());
+                            break;
+                        case R.id.rBtnMonthToDate:
+                            todayDate.set(Calendar.DAY_OF_MONTH, 1);
+                            startDate = dayformatter.format(todayDate.getTime());
+                            break;
+                        case R.id.rBtnCustom:
+                            startDate = btnFrom.getText().toString();
+                            EndDate = btnTo.getText().toString();
+                            break;
+                        default:
+                            startDate = EndDate;
+                    }
+
+                    ((GlobalData) getActivity().getApplication()).CreateExcel(startDate, EndDate);
                     Toast.makeText(getContext(), "Finished Saving", Toast.LENGTH_SHORT).show();
                 }
                 else

@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -230,7 +231,7 @@ public class GlobalData  extends Application {
         int dayCount = dayAmount(fromDate, toDate);
 
         try {
-            WritableWorkbook workbook = createWorkbook();
+            WritableWorkbook workbook = createWorkbook(toDate);
             int a = 1;
             WritableSheet sheet = workbook.createSheet("My Times", 0);
             try {
@@ -251,6 +252,7 @@ public class GlobalData  extends Application {
                         writeCell(3, i+1, dates.get(index).getLunchOut(), false, sheet);
                         writeCell(4, i+1, dates.get(index).getLunchIn(), false, sheet);
                         writeCell(5, i+1, dates.get(index).getClockOut(), false, sheet);
+                        writeCell(6, i+1, totalHours(dates.get(index)), false, sheet);
                     }
 
                     c.add(Calendar.DATE, 1);
@@ -293,8 +295,34 @@ public class GlobalData  extends Application {
         return amount;
     }
 
-    private WritableWorkbook createWorkbook() throws IOException {
-        String Fnamexls="MyTimes"  + ".xls";
+    public String totalHours(GlobalDates day){
+        SimpleDateFormat timeformatter = new SimpleDateFormat("HH:mm");
+        DecimalFormat df = new DecimalFormat("0.00");
+        String amount = "";
+        try {
+            Date cIn = timeformatter.parse(day.getClockIn());
+            Date LOut = timeformatter.parse(day.getLunchOut());
+            Date LIn = timeformatter.parse(day.getLunchIn());
+            Date COut = timeformatter.parse(day.getClockOut());
+
+            long difference = (LOut.getTime() - cIn.getTime()) + (COut.getTime() - LIn.getTime());
+            int days = (int) (difference / (1000*60*60*24));
+            int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
+            double min = (double) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+            min = min*0.01;
+            System.out.println("Min = " + min);
+            amount = df.format((hours < 0 ? -hours : hours) + min);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return amount;
+
+    }
+
+    private WritableWorkbook createWorkbook(String From, String To) throws IOException {
+        String Fnamexls="MyTimes " + From + " to " + To + ".xls";
 
         File directory = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/TimeTracker");
         directory.mkdirs();
