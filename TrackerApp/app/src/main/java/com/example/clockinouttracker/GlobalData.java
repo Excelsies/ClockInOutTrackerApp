@@ -231,7 +231,7 @@ public class GlobalData  extends Application {
         int dayCount = dayAmount(fromDate, toDate);
 
         try {
-            WritableWorkbook workbook = createWorkbook(toDate);
+            WritableWorkbook workbook = createWorkbook(fromDate, toDate);
             int a = 1;
             WritableSheet sheet = workbook.createSheet("My Times", 0);
             try {
@@ -322,7 +322,7 @@ public class GlobalData  extends Application {
     }
 
     private WritableWorkbook createWorkbook(String From, String To) throws IOException {
-        String Fnamexls="MyTimes " + From + " to " + To + ".xls";
+        String Fnamexls="MyHours " + From + " to " + To + ".xls";
 
         File directory = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/TimeTracker");
         directory.mkdirs();
